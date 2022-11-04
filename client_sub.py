@@ -1,6 +1,5 @@
 import errno
 import socket
-import sys
 import select
 import random
 # Create a UDP socket
@@ -11,13 +10,17 @@ broker_address = ('localhost', 10000)
 port = 10001
 
 
-## intentar fer un bucle fins que no se conecti seguir intentant
-try:
-    sock.bind(("127.0.0.1", port))
-except socket.error as e:
-    if e.errno == errno.EADDRINUSE:
-        port = random.randint(10002, 65535)
-        print("Port is already in use")
+busyPortFlag = False
+while not busyPortFlag:
+    try:
+        sock.bind(("127.0.0.1", port))
+    except socket.error as e:
+        if e.errno == errno.EADDRINUSE:
+            print("Port is already in use. Attempting to connect again.")
+            port = random.randint(10002, 65535)
+        else:
+            busyPortFlag = True
+            break
 
 messageA = b'sub:id:%i' % port
 messageB = b'sub:topic:game'
