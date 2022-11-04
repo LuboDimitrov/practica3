@@ -1,5 +1,3 @@
-### This code is a naive example of a pub/sub implementation
-### TASK: improve the model
 import collections
 import queue
 import select
@@ -31,10 +29,8 @@ while True:
         print(ready_socket)
         if ready_socket is sock:
             data, address = sock.recvfrom(1024)
-            # Do stuff with data, fill this up with your code
-
             print('received {} bytes from {}'.format(len(data), address))
-            print(data)  # b'sub:id:10001'
+            print(data)
 
             if data:
                 cmd, arg, msg = data.split(b":")
